@@ -9,6 +9,7 @@ export const theme = {
   line: colors.line,
   tabBar: colors.tabBar,
   onDark: colors.onDark,
+  tabInactive: colors.tabInactive,
   categoryColors: {
     bills: colors.ink,
     savings: colors.green,

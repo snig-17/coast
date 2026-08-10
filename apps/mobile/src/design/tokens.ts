@@ -10,6 +10,7 @@ export const colors = {
   coral: '#E4694E',
   tabBar: '#111111',
   onDark: '#F2EEE4',
+  tabInactive: '#6E6E6E',
 } as const;
 
 export const space = { xs: 4, sm: 8, md: 12, lg: 16, xl: 24, xxl: 32 } as const;

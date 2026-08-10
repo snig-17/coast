@@ -17,7 +17,7 @@ export default function TabsLayout() {
         headerShown: false,
         tabBarShowLabel: false,
         tabBarActiveTintColor: theme.onDark,
-        tabBarInactiveTintColor: '#6E6E6E',
+        tabBarInactiveTintColor: theme.tabInactive,
         tabBarStyle: { backgroundColor: theme.tabBar, borderTopWidth: 0 },
         tabBarIcon: ({ color, size }) => (
           <Ionicons name={ICONS[route.name] ?? 'ellipse'} size={size} color={color} />

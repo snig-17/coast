@@ -1,4 +1,4 @@
-import { SEED_STATE, Transaction } from '@coast/core';
+import { SEED_STATE, Statement, Transaction } from '@coast/core';
 import { annualLeakTotal } from '@coast/engine';
 import { coastStore } from '../store/store';
 
@@ -19,7 +19,7 @@ describe('coastStore', () => {
   });
   it('stamps a statement', () => {
     coastStore.getState().stampStatement('stmt_w31');
-    expect(coastStore.getState().data.statements.find((s: any) => s.id === 'stmt_w31')!.status).toBe('stamped');
+    expect(coastStore.getState().data.statements.find((s: Statement) => s.id === 'stmt_w31')!.status).toBe('stamped');
   });
   it('closes a leak and lowers the open annual total', () => {
     coastStore.getState().closeLeakById('leak_fees');
