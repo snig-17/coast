@@ -53,4 +53,21 @@ describe('weeklyStatement', () => {
     expect(tue.scored).toBe(true);
     expect(tue.amount).toBe(500);
   });
+
+  it('only moves savings forward from within the statement week', () => {
+    const txns: Transaction[] = [
+      { id: 'in',  amount: 3000, categoryId: 'savings', date: '2026-07-30', source: 'manual' }, // Thu, in week
+      { id: 'out', amount: 5000, categoryId: 'savings', date: '2026-08-20', source: 'manual' }, // outside week
+    ];
+    const view = weeklyStatement({
+      issueNumber: 31,
+      weekStart: new Date('2026-07-27T00:00:00Z'),
+      transactions: txns,
+      categoriesById: cats,
+      weeklyLine: 6300,
+      currentDailyRoom: 900,
+      leaksSpotted: 0,
+    });
+    expect(view.movedForward).toBe(3000);
+  });
 });

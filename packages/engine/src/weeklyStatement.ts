@@ -60,8 +60,14 @@ export function weeklyStatement(input: WeeklyStatementInput): WeeklyStatementVie
   });
 
   const actualSpend = dailyLedger.reduce((sum, e) => sum + e.amount, 0);
+  const weekStartMs = weekStart.getTime();
+  const weekEndMs = weekStartMs + 7 * MS_PER_DAY;
   const movedForward = transactions
-    .filter((t) => categoriesById[t.categoryId]?.group === 'savings')
+    .filter((t) => {
+      if (categoriesById[t.categoryId]?.group !== 'savings') return false;
+      const tMs = new Date(t.date).getTime();
+      return tMs >= weekStartMs && tMs < weekEndMs;
+    })
     .reduce((sum, t) => sum + t.amount, 0);
 
   const daysScored = scored ? 7 : 0;
