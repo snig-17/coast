@@ -15,6 +15,9 @@ describe('categorize', () => {
     expect(categorize('NETFLIX.COM')).toBe('subscriptions');
     expect(categorize('Pret A Manger')).toBe('eating_out');
     expect(categorize('Something Unknown Ltd')).toBe('uncategorised');
+    expect(categorize('TFL TRAVEL CH')).toBe('transport');
+    expect(categorize('GWR RAILWAY')).toBe('transport');
+    expect(categorize('NATIONAL EXPRESS BUSES')).toBe('transport');
   });
 });
 
