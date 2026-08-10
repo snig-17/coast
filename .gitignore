@@ -1,0 +1,37 @@
+# Dependencies
+node_modules/
+.pnp.*
+.yarn/*
+
+# Expo / React Native
+.expo/
+dist/
+web-build/
+*.orig.*
+.metro-health-check*
+
+# Native
+ios/Pods/
+ios/build/
+android/.gradle/
+android/app/build/
+*.keystore
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+
+# Build output
+build/
+coverage/
+
+# OS / editor
+.DS_Store
+*.log
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# EAS
+eas.json.local
