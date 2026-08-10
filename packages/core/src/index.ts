@@ -4,3 +4,4 @@ export * from './categories';
 export * from './seed';
 export * from './categorize';
 export * from './csv';
+export * from './persistence';
