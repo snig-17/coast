@@ -5,7 +5,8 @@
   "workspaces": ["packages/*", "apps/*"],
   "scripts": {
     "test": "jest",
-    "typecheck": "tsc -b packages/core packages/engine"
+    "typecheck": "tsc -b packages/core packages/engine",
+    "app": "npm run start --workspace @coast/mobile"
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",
