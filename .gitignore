@@ -25,6 +25,7 @@ android/app/build/
 # Build output
 build/
 coverage/
+*.tsbuildinfo
 
 # OS / editor
 .DS_Store

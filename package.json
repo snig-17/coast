@@ -5,7 +5,7 @@
   "workspaces": ["packages/*", "apps/*"],
   "scripts": {
     "test": "jest",
-    "typecheck": "tsc -b packages/core packages/engine --noEmit"
+    "typecheck": "tsc -b packages/core packages/engine"
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",
