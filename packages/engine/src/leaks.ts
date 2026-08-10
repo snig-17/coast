@@ -17,8 +17,9 @@ export interface DetectedLeak {
   annual: Pence;
 }
 
-// A leak is a discretionary merchant (never a protected 'joy'... treated as recurring)
-// that recurs at least 3 times. Annualised as the typical charge x 12.
+// A leak is a recurring discretionary merchant whose subpool is not 'essentials'
+// (i.e. lifestyle or joy), recurring at least 3 times. Annualised as the median
+// charge x 12.
 export function detectLeaks(
   transactions: Transaction[],
   categoriesById: Record<string, Category>,
