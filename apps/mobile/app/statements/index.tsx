@@ -1,4 +1,4 @@
-import { ScrollView, View, Pressable } from 'react-native';
+import { ScrollView, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useCoastStore } from '../../src/store/store';
 import { selectStatementList } from '../../src/store/statement';
