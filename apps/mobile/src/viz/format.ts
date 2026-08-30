@@ -30,3 +30,8 @@ export function paceLabel(room: SpendRoom): Pace {
     ? { onPace: true, text: "You're on pace." }
     : { onPace: false, text: 'Over today\'s room.' };
 }
+
+export function memberSinceLabel(iso: string): string {
+  const d = new Date(`${iso}T00:00:00Z`);
+  return `${MONTHS[d.getUTCMonth()]} ${d.getUTCFullYear()}`;
+}
