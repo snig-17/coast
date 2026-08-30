@@ -52,7 +52,6 @@ export default function Home() {
         <SectionHeader label="UNTIL PAYDAY" />
         <PaydayDots total={cycle.cycleLengthDays} elapsed={elapsed} />
         <AppText variant="title" style={{ marginTop: theme.space.md }}>Until payday — {cycle.daysUntilPayday} days left</AppText>
-        <AppText variant="body" muted>{formatGBP(room.leftUntilPayday)} left until payday</AppText>
 
         <View style={{ marginTop: theme.space.xl, borderTopWidth: 1, borderTopColor: theme.line, paddingTop: theme.space.lg, flexDirection: 'row', justifyContent: 'space-between' }}>
           <AppText variant="title" style={{ fontSize: 20, lineHeight: 24 }}>Set aside</AppText>

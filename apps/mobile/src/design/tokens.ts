@@ -7,7 +7,7 @@ export const colors = {
   teal: '#0F6E6E',
   green: '#2E7D5B',
   amber: '#D98A3D',
-  coral: '#E4694E',
+  overPace: '#E4694E',
   tabBar: '#111111',
   onDark: '#F2EEE4',
   tabInactive: '#6E6E6E',
