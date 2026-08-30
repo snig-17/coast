@@ -1,4 +1,4 @@
-import { Alert, ScrollView, View } from 'react-native';
+import { Alert, ScrollView, View, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useCoastStore } from '../../src/store/store';
 import { selectLeaksClosedAnnual } from '../../src/store/selectors';
@@ -58,6 +58,11 @@ export default function Profile() {
           <AppText variant="label" style={{ color: theme.accent }}>See all</AppText>
         </View>
         <AppText variant="body" muted style={{ marginTop: theme.space.md }}>Your first receipt prints when a fund hits its goal.</AppText>
+
+        <Pressable onPress={() => router.push('/automate')} style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: theme.space.xl, borderTopWidth: 1, borderTopColor: theme.line, paddingTop: theme.space.lg }}>
+          <AppText variant="title" style={{ fontSize: 20, lineHeight: 24 }}>Automate logging</AppText>
+          <AppText variant="title" style={{ color: theme.accent }}>›</AppText>
+        </Pressable>
       </ScrollView>
     </Screen>
   );
