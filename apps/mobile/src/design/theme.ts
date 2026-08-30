@@ -10,6 +10,7 @@ export const theme = {
   tabBar: colors.tabBar,
   onDark: colors.onDark,
   tabInactive: colors.tabInactive,
+  overPace: colors.overPace,
   categoryColors: {
     bills: colors.ink,
     savings: colors.green,
