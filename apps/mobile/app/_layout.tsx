@@ -5,7 +5,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { fontMap } from '../src/design/fonts';
 import { coastStore } from '../src/store/store';
-import { loadState } from '../src/store/persistence';
+import { loadState, saveState } from '../src/store/persistence';
 import { asyncStorageKV } from '../src/store/asyncStorage';
 
 SplashScreen.preventAutoHideAsync();
@@ -23,6 +23,14 @@ export default function RootLayout() {
   useEffect(() => {
     if (fontsLoaded && hydrated) SplashScreen.hideAsync();
   }, [fontsLoaded, hydrated]);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    const unsub = coastStore.subscribe((state) => {
+      void saveState(asyncStorageKV, state.data);
+    });
+    return unsub;
+  }, [hydrated]);
 
   if (!fontsLoaded || !hydrated) return null;
 

@@ -9,25 +9,31 @@ import { Money } from '../src/design/primitives/Money';
 import { PillButton } from '../src/design/primitives/PillButton';
 import { theme } from '../src/design/theme';
 
+let seq = 0;
+
+const one = (v: string | string[] | undefined): string | undefined => (Array.isArray(v) ? v[0] : v);
+
 export default function AddEntry() {
   const params = useLocalSearchParams<{ amount?: string; category?: string; note?: string; merchant?: string }>();
   const router = useRouter();
   const data = useCoastStore((s) => s.data);
   const addTransaction = useCoastStore((s) => s.addTransaction);
 
-  const [amount, setAmount] = useState(params.amount ?? '');
-  const [note, setNote] = useState(params.note ?? '');
+  const [amount, setAmount] = useState(one(params.amount) ?? '');
+  const [note, setNote] = useState(one(params.note) ?? '');
   const [categoryId, setCategoryId] = useState(
-    () => parseAddParams({ amount: params.amount, category: params.category, note: params.note, merchant: params.merchant }, data.categories).categoryId,
+    () => parseAddParams({ amount: one(params.amount), category: one(params.category), note: one(params.note), merchant: one(params.merchant) }, data.categories).categoryId,
   );
 
   const chips = data.categories.filter((c) => c.group === 'discretionary');
-  const parsed = parseAddParams({ amount, category: categoryId, note, merchant: params.merchant }, data.categories);
+  const parsed = parseAddParams({ amount, category: categoryId, note, merchant: one(params.merchant) }, data.categories);
+  const canSave = parsed.amount > 0;
 
   const onSave = () => {
+    if (!canSave) return;
     const now = new Date();
     const dateIso = now.toISOString().slice(0, 10);
-    const id = `t_${now.getTime()}`;
+    const id = `t_${now.getTime()}_${seq++}`;
     addTransaction(buildTransaction(parsed, dateIso, id));
     router.back();
   };
@@ -77,7 +83,7 @@ export default function AddEntry() {
           style={{ fontFamily: theme.type.body.family, fontSize: theme.type.body.size, color: theme.text, borderBottomWidth: 1, borderBottomColor: theme.line, paddingVertical: theme.space.sm }}
         />
 
-        <View style={{ marginTop: theme.space.xxl }}>
+        <View style={{ marginTop: theme.space.xxl, opacity: canSave ? 1 : 0.4 }}>
           <PillButton label="SAVE ENTRY" onPress={onSave} />
         </View>
       </ScrollView>
