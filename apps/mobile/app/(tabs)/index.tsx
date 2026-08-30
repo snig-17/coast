@@ -1,4 +1,5 @@
-import { Alert, ScrollView, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
+import { useRouter } from 'expo-router';
 import { useCoastStore } from '../../src/store/store';
 import { selectSpendRoom, selectPayCycle, selectLeaksAnnual } from '../../src/store/selectors';
 import { weekdayLabel, paceLabel } from '../../src/viz/format';
@@ -14,6 +15,7 @@ import { formatGBP } from '@coast/core';
 import { theme } from '../../src/design/theme';
 
 export default function Home() {
+  const router = useRouter();
   const data = useCoastStore((s) => s.data);
   const now = new Date();
   const room = selectSpendRoom(data, now);
@@ -74,7 +76,7 @@ export default function Home() {
           ))
         )}
       </ScrollView>
-      <Fab onPress={() => Alert.alert('Quick add', 'Logging arrives in the next update.')} />
+      <Fab onPress={() => router.push('/add')} />
     </Screen>
   );
 }
