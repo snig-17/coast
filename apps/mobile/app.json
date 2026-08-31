@@ -3,20 +3,37 @@
     "name": "Coast",
     "slug": "coast",
     "scheme": "coast",
-    "version": "0.0.1",
+    "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
+    "icon": "./assets/icon.png",
     "plugins": [
       "expo-router",
       "expo-font",
-      "expo-splash-screen"
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/splash-icon.png",
+          "imageWidth": 200,
+          "resizeMode": "contain",
+          "backgroundColor": "#E9E4D8"
+        }
+      ]
     ],
     "ios": {
-      "supportsTablet": false
+      "supportsTablet": false,
+      "bundleIdentifier": "com.snigdha.coast",
+      "buildNumber": "1"
     },
-    "splash": {
-      "backgroundColor": "#E9E4D8"
+    "android": {
+      "package": "com.snigdha.coast",
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png",
+        "backgroundColor": "#2C6E9B"
+      }
     }
   }
 }
