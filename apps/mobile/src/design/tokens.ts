@@ -4,7 +4,7 @@ export const colors = {
   ink: '#1A1A1A',
   inkMuted: '#6B6B63',
   line: '#D8D2C4',
-  teal: '#0F6E6E',
+  sea: '#2C6E9B',
   green: '#2E7D5B',
   amber: '#D98A3D',
   overPace: '#E4694E',
@@ -21,6 +21,6 @@ export const type = {
   hero:  { family: 'Archivo_800ExtraBold', size: 56, line: 60 },
   title: { family: 'Archivo_700Bold',      size: 28, line: 32 },
   stat:  { family: 'Archivo_700Bold',      size: 34, line: 38 },
-  label: { family: 'Inter_600SemiBold',    size: 13, line: 16, letter: 1 },
-  body:  { family: 'Inter_400Regular',     size: 16, line: 22 },
+  label: { family: 'System', size: 13, line: 16, letter: 1, weight: '600' },
+  body:  { family: 'System', size: 16, line: 22, weight: '400' },
 } as const;

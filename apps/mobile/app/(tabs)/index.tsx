@@ -9,6 +9,7 @@ import { Money } from '../../src/design/primitives/Money';
 import { ProgressBar } from '../../src/design/primitives/ProgressBar';
 import { SectionHeader } from '../../src/design/primitives/SectionHeader';
 import { StatusDots } from '../../src/design/primitives/StatusDots';
+import { Wordmark } from '../../src/design/primitives/Wordmark';
 import { PaydayDots } from '../../src/design/primitives/PaydayDots';
 import { Fab } from '../../src/design/primitives/Fab';
 import { formatGBP } from '@coast/core';
@@ -26,9 +27,9 @@ export default function Home() {
   return (
     <Screen>
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 120 }}>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: theme.space.lg }}>
-          <AppText variant="label" muted>COAST</AppText>
-          <AppText variant="label" style={{ color: theme.accent }}>{weekdayLabel(now)}</AppText>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: theme.space.lg }}>
+          <Wordmark size={40} />
+          <AppText variant="label" style={{ color: theme.sea }}>{weekdayLabel(now)}</AppText>
         </View>
 
         <StatusDots onPace={room.onPace} />

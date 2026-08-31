@@ -5,7 +5,7 @@ describe('design tokens', () => {
   it('exposes the Coast palette', () => {
     expect(colors.sand).toBe('#E9E4D8');
     expect(colors.ink).toBe('#1A1A1A');
-    expect(colors.teal).toBe('#0F6E6E');
+    expect(colors.sea).toBe('#2C6E9B');
     expect(colors.tabBar).toBe('#111111');
   });
   it('has an ascending spacing scale', () => {
@@ -20,9 +20,9 @@ describe('design tokens', () => {
 describe('theme', () => {
   it('maps semantic roles onto palette colours', () => {
     expect(theme.bg).toBe(colors.sand);
-    expect(theme.accent).toBe(colors.teal);
+    expect(theme.accent).toBe(colors.sea);
     expect(theme.tabBar).toBe(colors.tabBar);
     expect(theme.categoryColors.savings).toBe(colors.green);
-    expect(theme.categoryColors.discretionary).toBe(colors.teal);
+    expect(theme.categoryColors.discretionary).toBe(colors.sea);
   });
 });

@@ -15,6 +15,7 @@ export function AppText({ variant = 'body', muted, style, ...rest }: TextProps &
           lineHeight: t.line,
           color: muted ? theme.textMuted : theme.text,
           letterSpacing: 'letter' in t ? (t as { letter: number }).letter : 0,
+          fontWeight: 'weight' in t ? (t as { weight: string }).weight as '400' : undefined,
         },
         style,
       ]}
