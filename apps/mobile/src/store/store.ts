@@ -7,6 +7,7 @@ export interface CoastStore {
   data: CoastState;
   hydrate(next: CoastState): void;
   addTransaction(t: Transaction): void;
+  addTransactions(ts: Transaction[]): void;
   completeOnboarding(income: Income, plan: BudgetPlan): void;
   stampStatement(id: string): void;
   closeLeakById(id: string): void;
@@ -20,6 +21,8 @@ export const coastStore = createStore<CoastStore>()((set, get) => ({
   hydrate: (next) => set({ data: next }),
   addTransaction: (t) =>
     set({ data: { ...get().data, transactions: [t, ...get().data.transactions] } }),
+  addTransactions: (ts) =>
+    set({ data: { ...get().data, transactions: [...ts, ...get().data.transactions] } }),
   completeOnboarding: (income, plan) =>
     set({ data: { ...get().data, income, plan, onboardingComplete: true } }),
   stampStatement: (id) =>

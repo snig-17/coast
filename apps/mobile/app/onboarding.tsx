@@ -156,6 +156,10 @@ export default function Onboarding() {
             <AppText variant="body" muted style={{ marginTop: theme.space.lg }}>
               Daily spend room comes from your Lifestyle slice (<Money pence={plan.lifestyle} variant="body" />/mo).
             </AppText>
+            <Pressable onPress={() => router.push('/import')} style={{ marginTop: theme.space.xl, borderTopWidth: 1, borderTopColor: theme.line, paddingTop: theme.space.lg }}>
+              <AppText variant="label" style={{ color: theme.accent }}>Import past transactions ›</AppText>
+              <AppText variant="body" muted style={{ marginTop: theme.space.xs }}>Optional — pull in spending from an Amex or Revolut CSV.</AppText>
+            </Pressable>
           </View>
         )}
       </ScrollView>

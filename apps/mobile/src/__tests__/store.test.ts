@@ -17,6 +17,20 @@ describe('coastStore', () => {
     expect(after.length).toBe(before + 1);
     expect(after[0].id).toBe('t_new');
   });
+  it('addTransactions prepends a block preserving order', () => {
+    const before = coastStore.getState().data.transactions.length;
+    const a: Transaction = { id: 'imp_a', amount: 100, categoryId: 'food', date: '2026-08-01', source: 'import' };
+    const b: Transaction = { id: 'imp_b', amount: 200, categoryId: 'food', date: '2026-08-02', source: 'import' };
+    coastStore.getState().addTransactions([a, b]);
+    const after = coastStore.getState().data.transactions;
+    expect(after.length).toBe(before + 2);
+    expect(after.slice(0, 2).map((t) => t.id)).toEqual(['imp_a', 'imp_b']);
+  });
+  it('addTransactions with an empty array is a no-op', () => {
+    const before = coastStore.getState().data.transactions.length;
+    coastStore.getState().addTransactions([]);
+    expect(coastStore.getState().data.transactions.length).toBe(before);
+  });
   it('stamps a statement', () => {
     coastStore.getState().stampStatement('stmt_w31');
     expect(coastStore.getState().data.statements.find((s: Statement) => s.id === 'stmt_w31')!.status).toBe('stamped');
