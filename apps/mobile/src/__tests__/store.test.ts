@@ -31,6 +31,18 @@ describe('coastStore', () => {
     coastStore.getState().addTransactions([]);
     expect(coastStore.getState().data.transactions.length).toBe(before);
   });
+  it('addPayment prepends a payment', () => {
+    const before = coastStore.getState().data.payments.length;
+    const p = { id: 'pay_new', name: 'Gym', amount: 3000, cadence: 'monthly' as const, billingDay: 3, categoryId: 'rent' };
+    coastStore.getState().addPayment(p);
+    const after = coastStore.getState().data.payments;
+    expect(after.length).toBe(before + 1);
+    expect(after[0].id).toBe('pay_new');
+  });
+  it('setProfileName updates the profile name', () => {
+    coastStore.getState().setProfileName('Sam');
+    expect(coastStore.getState().data.profileName).toBe('Sam');
+  });
   it('stamps a statement', () => {
     coastStore.getState().stampStatement('stmt_w31');
     expect(coastStore.getState().data.statements.find((s: Statement) => s.id === 'stmt_w31')!.status).toBe('stamped');

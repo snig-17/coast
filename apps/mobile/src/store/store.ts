@@ -1,6 +1,6 @@
 import { createStore } from 'zustand/vanilla';
 import { useStore } from 'zustand';
-import { CoastState, SEED_STATE, Transaction, Income, BudgetPlan } from '@coast/core';
+import { CoastState, SEED_STATE, Transaction, Income, BudgetPlan, Payment } from '@coast/core';
 import { closeLeak } from '@coast/engine';
 
 export interface CoastStore {
@@ -8,6 +8,8 @@ export interface CoastStore {
   hydrate(next: CoastState): void;
   addTransaction(t: Transaction): void;
   addTransactions(ts: Transaction[]): void;
+  addPayment(p: Payment): void;
+  setProfileName(name: string): void;
   completeOnboarding(income: Income, plan: BudgetPlan): void;
   stampStatement(id: string): void;
   closeLeakById(id: string): void;
@@ -23,6 +25,10 @@ export const coastStore = createStore<CoastStore>()((set, get) => ({
     set({ data: { ...get().data, transactions: [t, ...get().data.transactions] } }),
   addTransactions: (ts) =>
     set({ data: { ...get().data, transactions: [...ts, ...get().data.transactions] } }),
+  addPayment: (p) =>
+    set({ data: { ...get().data, payments: [p, ...get().data.payments] } }),
+  setProfileName: (name) =>
+    set({ data: { ...get().data, profileName: name } }),
   completeOnboarding: (income, plan) =>
     set({ data: { ...get().data, income, plan, onboardingComplete: true } }),
   stampStatement: (id) =>

@@ -1,4 +1,4 @@
-import { Alert, ScrollView, View, Pressable } from 'react-native';
+import { ScrollView, View, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useCoastStore } from '../../src/store/store';
 import { selectLeaksClosedAnnual } from '../../src/store/selectors';
@@ -23,7 +23,7 @@ export default function Profile() {
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 60 }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: theme.space.lg }}>
           <AppText variant="label" muted>COAST</AppText>
-          <HeaderPill label="Settings" onPress={() => Alert.alert('Settings', 'Settings arrive in a later update.')} />
+          <HeaderPill label="Settings" onPress={() => router.push('/settings')} />
         </View>
 
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: theme.space.lg, marginTop: theme.space.xl }}>
@@ -53,9 +53,8 @@ export default function Profile() {
           </View>
         ) : null}
 
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: theme.space.xl }}>
+        <View style={{ marginTop: theme.space.xl }}>
           <AppText variant="label" muted>LATEST RECEIPT · {data.funds.length} SAVED</AppText>
-          <AppText variant="label" style={{ color: theme.accent }}>See all</AppText>
         </View>
         <AppText variant="body" muted style={{ marginTop: theme.space.md }}>Your first receipt prints when a fund hits its goal.</AppText>
 

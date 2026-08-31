@@ -141,6 +141,10 @@ export default function Onboarding() {
         {step === 5 && (
           <View style={{ marginTop: theme.space.xl }}>
             <AppText variant="title">Your plan</AppText>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingVertical: theme.space.md, borderBottomWidth: 1, borderBottomColor: theme.line }}>
+              <AppText variant="body">Payday</AppText>
+              <AppText variant="body" muted>day {input.paydayDom}</AppText>
+            </View>
             {[
               ['Income', input.incomeMonthly],
               ['Bills & Fixed', plan.bills],

@@ -1,4 +1,5 @@
-import { Alert, ScrollView, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
+import { useRouter } from 'expo-router';
 import { useCoastStore } from '../../src/store/store';
 import { selectRecurringTotal } from '../../src/store/selectors';
 import { billingsForMonth, upcomingBillings } from '../../src/store/payments';
@@ -12,6 +13,7 @@ import { theme } from '../../src/design/theme';
 
 export default function Payments() {
   const data = useCoastStore((s) => s.data);
+  const router = useRouter();
   const now = new Date();
   const year = now.getUTCFullYear();
   const month0 = now.getUTCMonth();
@@ -31,7 +33,7 @@ export default function Payments() {
         <AppText variant="body" muted>{formatGBP(total)} protected · {formatGBP(0)} possible savings</AppText>
 
         <View style={{ marginTop: theme.space.lg }}>
-          <PillButton label="+ ADD PAYMENT" onPress={() => Alert.alert('Add payment', 'Adding payments arrives in the next update.')} />
+          <PillButton label="+ ADD PAYMENT" onPress={() => router.push('/add-payment')} />
         </View>
 
         <View style={{ marginTop: theme.space.xl }}>
