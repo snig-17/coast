@@ -1,14 +1,12 @@
 import { useState } from 'react';
 import { ScrollView, View, Pressable, TextInput } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Cadence } from '@coast/core';
 import { useCoastStore } from '../src/store/store';
 import { buildPayment, isValidPayment, PaymentInput } from '../src/store/addPayment';
 import { Screen } from '../src/design/primitives/Screen';
 import { AppText } from '../src/design/primitives/Text';
 import { Money } from '../src/design/primitives/Money';
 import { PillButton } from '../src/design/primitives/PillButton';
-import { SegmentedToggle } from '../src/design/primitives/SegmentedToggle';
 import { theme } from '../src/design/theme';
 
 const PAYMENT_GROUPS = ['bills', 'savings', 'debt'];
@@ -23,10 +21,10 @@ export default function AddPayment() {
   const [name, setName] = useState('');
   const [amount, setAmount] = useState('');
   const [billingDay, setBillingDay] = useState('1');
-  const [cadence, setCadence] = useState<Cadence>('monthly');
   const [categoryId, setCategoryId] = useState(chips[0]?.id ?? 'rent');
 
-  const input: PaymentInput = { name, amount, billingDay, cadence, categoryId };
+  // Payments are modelled monthly (billed on a day of the month); cadence is fixed here.
+  const input: PaymentInput = { name, amount, billingDay, cadence: 'monthly', categoryId };
   const canSave = isValidPayment(input);
 
   const onSave = () => {
@@ -65,16 +63,7 @@ export default function AddPayment() {
           placeholderTextColor={theme.textMuted}
           style={{ fontFamily: theme.type.title.family, fontSize: theme.type.title.size, color: theme.text, paddingVertical: theme.space.sm }}
         />
-        <AppText variant="body" muted>That's <Money pence={buildPayment(input, 'preview').amount} variant="body" /> per {cadence === 'weekly' ? 'week' : 'month'}</AppText>
-
-        <AppText variant="label" muted style={{ marginTop: theme.space.xl }}>CADENCE</AppText>
-        <View style={{ marginTop: theme.space.md }}>
-          <SegmentedToggle
-            options={['Weekly', 'Monthly']}
-            value={cadence === 'weekly' ? 'Weekly' : 'Monthly'}
-            onChange={(v) => setCadence(v === 'Weekly' ? 'weekly' : 'monthly')}
-          />
-        </View>
+        <AppText variant="body" muted>That's <Money pence={buildPayment(input, 'preview').amount} variant="body" /> per month</AppText>
 
         <AppText variant="label" muted style={{ marginTop: theme.space.xl }}>BILLING DAY (OF MONTH)</AppText>
         <TextInput value={billingDay} onChangeText={setBillingDay} keyboardType="number-pad" placeholder="1" placeholderTextColor={theme.textMuted} style={fieldStyle} />
