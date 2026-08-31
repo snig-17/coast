@@ -63,6 +63,11 @@ export default function Profile() {
           <AppText variant="title" style={{ fontSize: 20, lineHeight: 24 }}>Automate logging</AppText>
           <AppText variant="title" style={{ color: theme.accent }}>›</AppText>
         </Pressable>
+
+        <Pressable onPress={() => router.push('/onboarding')} style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: theme.space.lg, borderTopWidth: 1, borderTopColor: theme.line, paddingTop: theme.space.lg }}>
+          <AppText variant="title" style={{ fontSize: 20, lineHeight: 24 }}>Redo onboarding</AppText>
+          <AppText variant="title" style={{ color: theme.accent }}>›</AppText>
+        </Pressable>
       </ScrollView>
     </Screen>
   );

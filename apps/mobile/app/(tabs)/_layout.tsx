@@ -1,6 +1,7 @@
-import { Tabs } from 'expo-router';
+import { Tabs, Redirect } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { theme } from '../../src/design/theme';
+import { useCoastStore } from '../../src/store/store';
 
 const ICONS: Record<string, keyof typeof Ionicons.glyphMap> = {
   index: 'home',
@@ -11,6 +12,9 @@ const ICONS: Record<string, keyof typeof Ionicons.glyphMap> = {
 };
 
 export default function TabsLayout() {
+  const onboardingComplete = useCoastStore((s) => s.data.onboardingComplete);
+  if (!onboardingComplete) return <Redirect href="/onboarding" />;
+
   return (
     <Tabs
       screenOptions={({ route }) => ({
