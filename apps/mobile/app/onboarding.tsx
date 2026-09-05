@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { ScrollView, View, Pressable, TextInput, Text } from 'react-native';
 import { useRouter } from 'expo-router';
 import { parseAmount } from '@coast/core';
-import { planBreakdown } from '@coast/engine';
 import { useCoastStore } from '../src/store/store';
 import { Screen } from '../src/design/primitives/Screen';
 import { AppText } from '../src/design/primitives/Text';
@@ -71,6 +70,17 @@ export default function Onboarding() {
   const [flow, setFlow] = useState<Flow>(() => initialFlow());
   const [sheet, setSheet] = useState<{ pool: 'essentials' | 'lifestyle'; def: CatDef } | null>(null);
   const [bd, setBd] = useState<Record<string, string>>({});
+  const [subName, setSubName] = useState('');
+  const [subAmt, setSubAmt] = useState('');
+
+  const addCustomSub = () => {
+    const name = subName.trim();
+    const pence = parseAmount(subAmt);
+    if (!name || pence <= 0) return;
+    setFlow((f) => ({ ...f, subs: [...f.subs.filter((s) => s.name !== name), { name, pence }] }));
+    setSubName('');
+    setSubAmt('');
+  };
 
   const patch = (p: Partial<Flow>) => setFlow((f) => ({ ...f, ...p }));
   const setCat = (pool: 'essentials' | 'lifestyle', key: string, entry: CategoryEntry) =>
@@ -78,6 +88,21 @@ export default function Onboarding() {
 
   const incomeM = incomeMonthly(flow);
   const built = buildPlanFromFlow(flow);
+
+  // Result donut: total to income so every pound has a place. "Spending money"
+  // is everything left after fixed costs, debt and savings (mapped flexible +
+  // any unallocated breathing room), matching the donut slice exactly.
+  const resultSpending = Math.max(0, incomeM - built.plan.bills - built.plan.savings - built.plan.debt);
+  const resultSegs = [
+    { group: 'bills' as const, amount: built.plan.bills },
+    { group: 'savings' as const, amount: built.plan.savings },
+    { group: 'discretionary' as const, amount: resultSpending },
+    { group: 'debt' as const, amount: built.plan.debt },
+  ];
+  const resultBreakdown = {
+    total: incomeM,
+    segments: resultSegs.map((s) => ({ ...s, pct: incomeM ? s.amount / incomeM : 0 })),
+  };
 
   // building screen auto-advances
   useEffect(() => {
@@ -311,8 +336,34 @@ export default function Onboarding() {
                   <Chip key={p.name} label={`${p.name} £${(p.pence / 100).toFixed(2)}`} selected={on} onPress={() => patch({ subs: on ? flow.subs.filter((s) => s.name !== p.name) : [...flow.subs, p] })} />
                 );
               })}
+              {flow.subs.filter((s) => !SUB_PRESETS.some((p) => p.name === s.name)).map((s) => (
+                <Chip key={s.name} label={`${s.name} £${(s.pence / 100).toFixed(2)}  ✕`} selected onPress={() => patch({ subs: flow.subs.filter((x) => x.name !== s.name) })} />
+              ))}
             </View>
-            {subsMonthly(flow) > 0 ? <AppText variant="body" muted style={{ marginTop: theme.space.xl }}>Protecting <Money pence={subsMonthly(flow)} variant="body" /> a month.</AppText> : null}
+
+            <AppText variant="label" muted style={{ marginTop: theme.space.xl }}>ADD ANOTHER</AppText>
+            <View style={{ flexDirection: 'row', gap: theme.space.md, alignItems: 'flex-end', marginTop: theme.space.xs }}>
+              <TextInput
+                value={subName}
+                onChangeText={setSubName}
+                placeholder="Name"
+                placeholderTextColor={theme.textMuted}
+                style={{ flex: 2, fontFamily: theme.type.body.family, fontSize: theme.type.title.size, color: theme.text, borderBottomWidth: 1, borderBottomColor: theme.line, paddingVertical: theme.space.sm }}
+              />
+              <TextInput
+                value={subAmt}
+                onChangeText={setSubAmt}
+                keyboardType="decimal-pad"
+                placeholder="£/mo"
+                placeholderTextColor={theme.textMuted}
+                style={{ flex: 1, fontFamily: theme.type.title.family, fontSize: theme.type.title.size, color: theme.text, borderBottomWidth: 1, borderBottomColor: theme.line, paddingVertical: theme.space.sm }}
+              />
+            </View>
+            <Pressable onPress={addCustomSub} style={{ marginTop: theme.space.md, opacity: subName.trim() && parseAmount(subAmt) > 0 ? 1 : 0.4 }}>
+              <AppText variant="label" style={{ color: theme.accent }}>+ Add subscription</AppText>
+            </Pressable>
+
+            {subsMonthly(flow) > 0 ? <AppText variant="body" muted style={{ marginTop: theme.space.xl }}>Protecting <Money pence={subsMonthly(flow)} variant="body" /> a month across {flow.subs.length} {flow.subs.length === 1 ? 'subscription' : 'subscriptions'}.</AppText> : null}
           </View>
         )}
 
@@ -380,12 +431,12 @@ export default function Onboarding() {
             <AppText variant="title" style={{ marginTop: theme.space.sm }}>Every pound has a place.</AppText>
             <AppText variant="body" muted style={{ marginTop: theme.space.sm }}>Here's the plan built from your real month.</AppText>
             <View style={{ alignItems: 'center', marginTop: theme.space.lg }}>
-              <DonutChart breakdown={planBreakdown(built.plan)} topLabel="PER MONTH" centerPence={planBreakdown(built.plan).total} />
+              <DonutChart breakdown={resultBreakdown} topLabel="PER MONTH" centerPence={incomeM} />
             </View>
             {[
               ['Bills & fixed', built.plan.bills, theme.categoryColors.bills],
               ['Savings', built.plan.savings, theme.categoryColors.savings],
-              ['Spending money', built.plan.lifestyle, theme.categoryColors.discretionary],
+              ['Spending money', resultSpending, theme.categoryColors.discretionary],
               ['Debt', built.plan.debt, theme.categoryColors.debt],
             ].map(([label, pence, color]) => (
               <View key={label as string} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: theme.space.md, borderBottomWidth: 1, borderBottomColor: theme.line }}>
@@ -396,6 +447,9 @@ export default function Onboarding() {
                 <Money pence={pence as number} mode="whole" variant="body" />
               </View>
             ))}
+            <AppText variant="body" muted style={{ marginTop: theme.space.md }}>
+              Of that, <Money pence={built.plan.lifestyle} mode="whole" variant="body" />/mo is the day-to-day spending Coast paces for you.
+            </AppText>
           </View>
         )}
 
