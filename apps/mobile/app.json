@@ -24,7 +24,10 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.snigdha.coast",
-      "buildNumber": "1"
+      "buildNumber": "1",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "package": "com.snigdha.coast",
@@ -33,6 +36,12 @@
         "foregroundImage": "./assets/android-icon-foreground.png",
         "monochromeImage": "./assets/android-icon-monochrome.png",
         "backgroundColor": "#2C6E9B"
+      }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "1fee1919-15ba-4b3c-9286-b50c584a799d"
       }
     }
   }
