@@ -16,11 +16,14 @@ today, without touching what's protected?*
 
 ## Status
 
-Early. Design spec:
-[`docs/superpowers/specs/2026-08-09-coast-design.md`](docs/superpowers/specs/2026-08-09-coast-design.md).
-Implementation planning next.
+Working Expo app: onboarding, Amex and Revolut CSV import, quick manual entry, payments, a plan
+view and weekly statements. The finance engine, CSV parsing and app logic are covered by unit
+tests, and CI runs typecheck and tests on every push to main and on pull requests.
 
-## Structure (planned)
+Design spec:
+[`docs/superpowers/specs/2026-08-09-coast-design.md`](docs/superpowers/specs/2026-08-09-coast-design.md).
+
+## Structure
 
 ```
 packages/engine   @coast/engine — pure finance logic + tests
