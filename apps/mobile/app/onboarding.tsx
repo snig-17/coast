@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ScrollView, View, Pressable, TextInput, Text } from 'react-native';
 import { useRouter } from 'expo-router';
+import Animated, { FadeInUp } from 'react-native-reanimated';
 import { parseAmount, formatGBP } from '@coast/core';
 import { useCoastStore } from '../src/store/store';
 import { Screen } from '../src/design/primitives/Screen';
@@ -14,6 +15,7 @@ import { WaveLine } from '../src/design/primitives/WaveLine';
 import { Shell } from '../src/design/primitives/Shell';
 import { SCRIPT_FAMILY } from '../src/design/fonts';
 import { theme } from '../src/design/theme';
+import { motion, useReducedMotion } from '../src/design/motion';
 import {
   Flow, initialFlow, buildPlanFromFlow, Frequency, FREQUENCIES, ruleLabel,
   ESSENTIAL_CATS, LIFESTYLE_CATS, SUB_PRESETS, GOALS, PACE_META, Pace, CatDef,
@@ -23,6 +25,10 @@ import {
 import { Eyebrow, ContextBar, ChipRow, Chip, DayCarousel, MoneySheet, SegTwo, MapRow, OptionRow } from '../src/onboarding/parts';
 
 const LAST = 15; // Leaks / start
+
+const stepEntrance = FadeInUp.duration(motion.duration.settle)
+  .easing(motion.easing.enter)
+  .withInitialValues({ opacity: 0, transform: [{ translateY: 10 }] });
 const PHASE_LABEL = (s: number) => (s <= 5 ? 'YOUR MONEY' : s <= 10 ? 'YOUR PLAN' : 'YOUR PLAN');
 
 function LabeledAmount({ label, value, onChangeText }: { label: string; value: string; onChangeText: (t: string) => void }) {
@@ -52,6 +58,7 @@ export default function Onboarding() {
   const completeOnboarding = useCoastStore((s) => s.completeOnboarding);
 
   const [step, setStep] = useState(0);
+  const reducedMotion = useReducedMotion();
   const [flow, setFlow] = useState<Flow>(() => initialFlow());
   const [sheet, setSheet] = useState<{ pool: 'essentials' | 'lifestyle'; def: CatDef } | null>(null);
   const [bd, setBd] = useState<Record<string, string>>({});
@@ -145,6 +152,12 @@ export default function Onboarding() {
       )}
 
       <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled" contentContainerStyle={{ paddingBottom: 40, flexGrow: 1 }}>
+        {/* Keying on step remounts the body each time, so the entering animation
+            runs. A short fade with 10px of rise reads as "new content" in both
+            directions; a directional slide would lie when the reader taps Back.
+            The chrome above and the footer below stay put, which is what makes
+            the flow feel like one surface rather than a stack of screens. */}
+        <Animated.View key={step} entering={reducedMotion ? undefined : stepEntrance} style={{ flexGrow: 1 }}>
         {/* 0 — Welcome */}
         {step === 0 && (
           <View style={{ marginTop: 72, alignItems: 'center' }}>
@@ -462,6 +475,7 @@ export default function Onboarding() {
             </View>
           </View>
         )}
+        </Animated.View>
       </ScrollView>
 
       {step !== 13 && (

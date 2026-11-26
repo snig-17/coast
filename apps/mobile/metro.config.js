@@ -11,6 +11,9 @@ config.resolver.nodeModulesPaths = [
   path.resolve(workspaceRoot, 'node_modules'),
 ];
 config.resolver.unstable_enableSymlinks = true;
-config.resolver.disableHierarchicalLookup = true;
+// Hierarchical lookup stays ON. nodeModulesPaths already pins the two roots we
+// care about, and disabling the walk-up stops Metro reaching a package's own
+// nested node_modules — which breaks any dependency that pins a version the
+// root cannot hoist (reanimated needs semver 7; the root has 6.3.1).
 
 module.exports = config;

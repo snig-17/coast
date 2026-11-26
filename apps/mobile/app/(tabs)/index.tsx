@@ -12,6 +12,7 @@ import { StatusDots } from '../../src/design/primitives/StatusDots';
 import { Wordmark } from '../../src/design/primitives/Wordmark';
 import { PaydayDots } from '../../src/design/primitives/PaydayDots';
 import { Fab } from '../../src/design/primitives/Fab';
+import { CountingMoney } from '../../src/design/primitives/CountingMoney';
 import { formatGBP } from '@coast/core';
 import { theme } from '../../src/design/theme';
 
@@ -38,7 +39,7 @@ export default function Home() {
           <AppText variant="label" muted>TODAY'S SPEND ROOM</AppText>
           <AppText variant="label" muted>What's this?</AppText>
         </View>
-        <Money pence={room.dailyRoom} variant="hero" />
+        <CountingMoney pence={room.dailyRoom} variant="hero" />
         <AppText variant="body" muted style={{ marginTop: theme.space.sm }}>
           {formatGBP(room.leftUntilPayday)} left until payday
         </AppText>
