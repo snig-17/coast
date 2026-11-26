@@ -3,24 +3,27 @@ import { Ionicons } from '@expo/vector-icons';
 import { theme } from '../../src/design/theme';
 import { useCoastStore } from '../../src/store/store';
 
-const ICONS: Record<string, keyof typeof Ionicons.glyphMap> = {
-  index: 'home',
-  activity: 'trending-up',
-  payments: 'card',
-  plan: 'pie-chart',
-  profile: 'person',
-};
-
-// Names from Plan 2 (the app shell). Home and Profile read from their glyphs;
-// a pie, a trend line and a card do not say Plan, Activity and Payments on
-// their own, and the tab bar is the app's only wayfinding.
-const LABELS: Record<string, string> = {
-  index: 'Home',
-  activity: 'Activity',
-  payments: 'Payments',
-  plan: 'Plan',
-  profile: 'Profile',
-};
+/**
+ * Tab order, left to right. expo-router derives its own order from the route
+ * files, which put Profile in the centre slot — the most prominent position in
+ * a five-tab bar — and pushed Activity and Payments to the edge. Declaring the
+ * screens below in this order fixes that.
+ *
+ * The order is Plan 2's, which the old ICONS map was already written in:
+ * Home, Activity, Payments, Plan, Profile. Profile goes last, where iOS puts
+ * the account tab.
+ *
+ * Names come from Plan 2 too. Home and Profile read from their glyphs; a pie, a
+ * trend line and a card do not say Plan, Activity and Payments on their own, and
+ * the tab bar is the app's only wayfinding.
+ */
+const TABS: { name: string; label: string; icon: keyof typeof Ionicons.glyphMap }[] = [
+  { name: 'index', label: 'Home', icon: 'home' },
+  { name: 'activity', label: 'Activity', icon: 'trending-up' },
+  { name: 'payments', label: 'Payments', icon: 'card' },
+  { name: 'plan', label: 'Plan', icon: 'pie-chart' },
+  { name: 'profile', label: 'Profile', icon: 'person' },
+];
 
 export default function TabsLayout() {
   const onboardingComplete = useCoastStore((s) => s.data.onboardingComplete);
@@ -28,9 +31,8 @@ export default function TabsLayout() {
 
   return (
     <Tabs
-      screenOptions={({ route }) => ({
+      screenOptions={{
         headerShown: false,
-        title: LABELS[route.name] ?? route.name,
         tabBarActiveTintColor: theme.onDark,
         tabBarInactiveTintColor: theme.tabInactive,
         tabBarStyle: { backgroundColor: theme.tabBar, borderTopWidth: 0 },
@@ -42,10 +44,18 @@ export default function TabsLayout() {
           fontWeight: theme.type.label.weight,
           letterSpacing: 0.2,
         },
-        tabBarIcon: ({ color, size }) => (
-          <Ionicons name={ICONS[route.name] ?? 'ellipse'} size={size} color={color} />
-        ),
-      })}
-    />
+      }}
+    >
+      {TABS.map((t) => (
+        <Tabs.Screen
+          key={t.name}
+          name={t.name}
+          options={{
+            title: t.label,
+            tabBarIcon: ({ color, size }) => <Ionicons name={t.icon} size={size} color={color} />,
+          }}
+        />
+      ))}
+    </Tabs>
   );
 }
