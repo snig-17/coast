@@ -315,7 +315,9 @@ export default function Onboarding() {
 
         {/* 9 — Subscriptions */}
         {step === 9 && (
-          <View style={{ marginTop: theme.space.xl }}>
+          <View style={{ marginTop: theme.space.lg }}>
+            <ContextBar index="02" label="LIFESTYLE" pence={Math.max(0, leftToMap(flow) - essentialsMonthly(flow) - lifestyleMonthly(flow) - subsMonthly(flow))} note="LEFT TO MAP" fraction={(essentialsMonthly(flow) + lifestyleMonthly(flow) + subsMonthly(flow)) / Math.max(1, leftToMap(flow))} />
+            <View style={{ marginTop: theme.space.xl }}>
             <Eyebrow text="SUBSCRIPTIONS" color={theme.overPace} />
             <AppText variant="title" style={{ marginTop: theme.space.sm }}>Any subscriptions to protect?</AppText>
             <AppText variant="body" muted style={{ marginTop: theme.space.sm }}>Recurring payments you want on your plan. Skip if you have none.</AppText>
@@ -353,6 +355,7 @@ export default function Onboarding() {
             </Pressable>
 
             {subsMonthly(flow) > 0 ? <AppText variant="body" muted style={{ marginTop: theme.space.xl }}>Protecting <Money pence={subsMonthly(flow)} variant="body" /> a month across {flow.subs.length} {flow.subs.length === 1 ? 'subscription' : 'subscriptions'}.</AppText> : null}
+            </View>
           </View>
         )}
 
