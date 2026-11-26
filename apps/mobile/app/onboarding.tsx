@@ -24,12 +24,12 @@ import {
 } from '../src/onboarding/model';
 import { Eyebrow, ContextBar, ChipRow, Chip, DayCarousel, MoneySheet, SegTwo, MapRow, OptionRow } from '../src/onboarding/parts';
 
-const LAST = 15; // Leaks / start
+const LAST = 14; // Leaks / start
 
 const stepEntrance = FadeInUp.duration(motion.duration.settle)
   .easing(motion.easing.enter)
   .withInitialValues({ opacity: 0, transform: [{ translateY: 10 }] });
-const PHASE_LABEL = (s: number) => (s <= 5 ? 'YOUR MONEY' : s <= 10 ? 'YOUR PLAN' : 'YOUR PLAN');
+const PHASE_LABEL = (s: number) => (s <= 5 ? 'YOUR MONEY' : 'YOUR PLAN');
 
 function LabeledAmount({ label, value, onChangeText }: { label: string; value: string; onChangeText: (t: string) => void }) {
   return (
@@ -41,9 +41,9 @@ function LabeledAmount({ label, value, onChangeText }: { label: string; value: s
 }
 
 function PhaseBars({ step }: { step: number }) {
-  // three phases: money-in+fixed (1-5), flexible (6-10), savings+result (11-15)
+  // three phases: money-in+fixed (1-5), flexible (6-9), savings+result (10-14)
   const frac = (lo: number, hi: number) => Math.max(0, Math.min(1, (step - lo + 1) / (hi - lo + 1)));
-  const phases = [frac(1, 5), frac(6, 10), frac(11, 15)];
+  const phases = [frac(1, 5), frac(6, 9), frac(10, 14)];
   return (
     <View style={{ flexDirection: 'row', gap: theme.space.sm, marginTop: theme.space.lg }}>
       {phases.map((f, i) => (
@@ -98,8 +98,8 @@ export default function Onboarding() {
 
   // building screen auto-advances
   useEffect(() => {
-    if (step !== 13) return;
-    const t = setTimeout(() => setStep(14), 1600);
+    if (step !== 12) return;
+    const t = setTimeout(() => setStep(13), 1600);
     return () => clearTimeout(t);
   }, [step]);
 
@@ -117,14 +117,14 @@ export default function Onboarding() {
     : step === 6 ? 'Start with essentials'
     : step === 7 ? 'Continue to lifestyle'
     : step === 8 ? "Show me what's left"
-    : step === 12 ? 'Build my plan'
-    : step === 14 ? "Show me what's hidden"
+    : step === 11 ? 'Build my plan'
+    : step === 13 ? "Show me what's hidden"
     : step === LAST ? 'Start Coast'
     : 'Continue';
 
   const onNext = () => {
     if (!canProceed) return;
-    if (step === 12) { setStep(13); return; } // -> building
+    if (step === 11) { setStep(12); return; } // -> building
     if (step === LAST) {
       completeOnboarding(built.income, built.plan);
       router.replace('/');
@@ -141,7 +141,7 @@ export default function Onboarding() {
 
   return (
     <Screen>
-      {step === 13 ? null : (
+      {step === 12 ? null : (
         <>
           <PhaseBars step={step} />
           <View style={{ alignItems: 'center', marginTop: theme.space.sm }}>
@@ -366,28 +366,24 @@ export default function Onboarding() {
               <AppText variant="label" style={{ color: theme.accent }}>+ Add subscription</AppText>
             </Pressable>
 
-            {subsMonthly(flow) > 0 ? <AppText variant="body" muted style={{ marginTop: theme.space.xl }}>Protecting <Money pence={subsMonthly(flow)} variant="body" /> a month across {flow.subs.length} {flow.subs.length === 1 ? 'subscription' : 'subscriptions'}.</AppText> : null}
+            {/* Carried here from the old Joy step, which asked nothing and spent
+                three paragraphs saying this. It belongs at the moment the
+                subscriptions are added, not a screen later. */}
+            {subsMonthly(flow) > 0 ? (
+              <AppText variant="body" muted style={{ marginTop: theme.space.xl }}>
+                Protecting <Money pence={subsMonthly(flow)} variant="body" /> a month across {flow.subs.length} {flow.subs.length === 1 ? 'subscription' : 'subscriptions'}. Coast counts these as Joy — never flagged as a leak, never first to cut.
+              </AppText>
+            ) : (
+              <AppText variant="body" muted style={{ marginTop: theme.space.xl }}>
+                Anything you add here counts as Joy — never flagged as a leak, never first to cut.
+              </AppText>
+            )}
             </View>
           </View>
         )}
 
-        {/* 10 — Joy */}
+        {/* 10 — Savings goals */}
         {step === 10 && (
-          <View style={{ marginTop: theme.space.xl }}>
-            <Eyebrow text="JOY" color={theme.overPace} />
-            <AppText variant="title" style={{ marginTop: theme.space.sm }}>What's worth keeping?</AppText>
-            <AppText variant="body" muted style={{ marginTop: theme.space.sm }}>Joy is spending you choose on purpose. Coast still counts it, but never calls it a leak or suggests cutting it first.</AppText>
-            <View style={{ marginTop: theme.space.lg, borderLeftWidth: 3, borderLeftColor: theme.overPace, paddingLeft: theme.space.md }}>
-              <AppText variant="body">Your subscriptions are already protected as Joy. Everything else stays flexible.</AppText>
-            </View>
-            {subsMonthly(flow) > 0
-              ? <AppText variant="body" muted style={{ marginTop: theme.space.lg }}>{flow.subs.map((s) => s.name).join(', ')} — <Money pence={subsMonthly(flow)} variant="body" />/mo, never flagged.</AppText>
-              : <AppText variant="body" muted style={{ marginTop: theme.space.lg }}>You haven't added any protected spending yet. That's completely fine.</AppText>}
-          </View>
-        )}
-
-        {/* 11 — Savings goals */}
-        {step === 11 && (
           <View style={{ marginTop: theme.space.xl }}>
             <Eyebrow text="GIVE IT A JOB" color={theme.categoryColors.savings} />
             <AppText variant="title" style={{ marginTop: theme.space.sm }}>What should your savings build first?</AppText>
@@ -399,8 +395,8 @@ export default function Onboarding() {
           </View>
         )}
 
-        {/* 12 — Savings pace */}
-        {step === 12 && (
+        {/* 11 — Savings pace */}
+        {step === 11 && (
           <View style={{ marginTop: theme.space.lg }}>
             <ContextBar index="03" label="SAVINGS" pence={availableForSavings(flow)} note="AVAILABLE" fraction={0.66} color={theme.categoryColors.savings} />
             <View style={{ marginTop: theme.space.xl }}>
@@ -417,8 +413,8 @@ export default function Onboarding() {
           </View>
         )}
 
-        {/* 13 — Building */}
-        {step === 13 && (
+        {/* 12 — Building */}
+        {step === 12 && (
           <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingVertical: 120 }}>
             <AppText variant="label" style={{ color: theme.sea, letterSpacing: 2 }}>BUILDING YOUR PLAN</AppText>
             <View style={{ marginTop: theme.space.xl }}><Shell size={120} color={theme.sea} strokeWidth={2} /></View>
@@ -428,8 +424,8 @@ export default function Onboarding() {
           </View>
         )}
 
-        {/* 14 — Result donut */}
-        {step === 14 && (
+        {/* 13 — Result donut */}
+        {step === 13 && (
           <View style={{ marginTop: theme.space.xl }}>
             <Eyebrow text="YOUR PLAN" color={theme.overPace} />
             <AppText variant="title" style={{ marginTop: theme.space.sm }}>Every pound has a place.</AppText>
@@ -467,8 +463,8 @@ export default function Onboarding() {
           </View>
         )}
 
-        {/* 15 — Leaks check */}
-        {step === 15 && (
+        {/* 14 — Leaks check */}
+        {step === 14 && (
           <View style={{ marginTop: theme.space.xl }}>
             <Eyebrow text="NOTHING HIDDEN" color={theme.overPace} />
             <AppText variant="title" style={{ marginTop: theme.space.sm }}>Your spending already looks intentional.</AppText>
@@ -487,7 +483,8 @@ export default function Onboarding() {
         </Animated.View>
       </ScrollView>
 
-      {step !== 13 && (
+      {/* No footer on the building screen (12), which advances itself. */}
+      {step !== 12 && (
         <View style={{ flexDirection: 'row', gap: theme.space.md, marginBottom: theme.space.lg, marginTop: theme.space.sm }}>
           {step > 0 ? (
             <Pressable onPress={() => setStep((s) => Math.max(0, s - 1))} style={{ justifyContent: 'center', paddingHorizontal: theme.space.lg }}>
