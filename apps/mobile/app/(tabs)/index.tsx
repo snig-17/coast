@@ -11,7 +11,7 @@ import { SectionHeader } from '../../src/design/primitives/SectionHeader';
 import { StatusDots } from '../../src/design/primitives/StatusDots';
 import { Wordmark } from '../../src/design/primitives/Wordmark';
 import { PaydayDots } from '../../src/design/primitives/PaydayDots';
-import { Fab } from '../../src/design/primitives/Fab';
+import { Fab, FAB_CLEARANCE } from '../../src/design/primitives/Fab';
 import { CountingMoney } from '../../src/design/primitives/CountingMoney';
 import { formatGBP } from '@coast/core';
 import { theme } from '../../src/design/theme';
@@ -27,7 +27,14 @@ export default function Home() {
 
   return (
     <Screen>
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 120 }}>
+      {/* The scroll area stops above the Fab's strip, so no row ever renders
+          under the button. Without this the leaks figure and ALL ACTIVITY sit
+          beneath it at rest and have to be scrolled clear before they read. */}
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={{ marginBottom: FAB_CLEARANCE }}
+        contentContainerStyle={{ paddingBottom: theme.space.xl }}
+      >
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: theme.space.lg }}>
           <Wordmark size={40} />
           <AppText variant="label" style={{ color: theme.sea }}>{weekdayLabel(now)}</AppText>
