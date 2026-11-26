@@ -10,7 +10,9 @@ export const colors = {
   overPace: '#E4694E',
   tabBar: '#111111',
   onDark: '#F2EEE4',
-  tabInactive: '#6E6E6E',
+  // 4.9:1 on tabBar #111. The old #6E6E6E was 3.70:1 — fine for an icon
+  // (3:1 threshold) but below the 4.5:1 floor for the tab labels' small text.
+  tabInactive: '#828282',
 } as const;
 
 export const space = { xs: 4, sm: 8, md: 12, lg: 16, xl: 24, xxl: 32 } as const;
