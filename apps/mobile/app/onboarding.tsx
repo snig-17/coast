@@ -327,21 +327,21 @@ export default function Onboarding() {
             </View>
 
             <AppText variant="label" muted style={{ marginTop: theme.space.xl }}>ADD ANOTHER</AppText>
-            <View style={{ flexDirection: 'row', gap: theme.space.md, alignItems: 'flex-end', marginTop: theme.space.xs }}>
-              <TextInput
-                value={subName}
-                onChangeText={setSubName}
-                placeholder="Name"
-                placeholderTextColor={theme.textMuted}
-                style={{ flex: 2, fontFamily: theme.type.body.family, fontSize: theme.type.title.size, color: theme.text, borderBottomWidth: 1, borderBottomColor: theme.line, paddingVertical: theme.space.sm }}
-              />
-              <AmountField
-                value={subAmt}
-                onChangeText={setSubAmt}
-                placeholder="£/mo"
-                underline
-                containerStyle={{ flex: 1 }}
-              />
+            <View style={{ flexDirection: 'row', gap: theme.space.md, alignItems: 'flex-end', marginTop: theme.space.md }}>
+              <View style={{ flex: 2 }}>
+                <AppText variant="label" muted>NAME</AppText>
+                <TextInput
+                  value={subName}
+                  onChangeText={setSubName}
+                  placeholder="Netflix"
+                  placeholderTextColor={theme.textMuted}
+                  style={{ fontFamily: theme.type.body.family, fontSize: theme.type.title.size, color: theme.text, borderBottomWidth: 1, borderBottomColor: theme.line, paddingVertical: theme.space.sm }}
+                />
+              </View>
+              <View style={{ flex: 1 }}>
+                <AppText variant="label" muted>£ / MONTH</AppText>
+                <AmountField value={subAmt} onChangeText={setSubAmt} underline />
+              </View>
             </View>
             <Pressable onPress={addCustomSub} style={{ marginTop: theme.space.md, opacity: subName.trim() && parseAmount(subAmt) > 0 ? 1 : 0.4 }}>
               <AppText variant="label" style={{ color: theme.accent }}>+ Add subscription</AppText>
