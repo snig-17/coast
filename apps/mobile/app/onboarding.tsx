@@ -440,7 +440,7 @@ export default function Onboarding() {
             {[
               ['Bills & fixed', built.plan.bills, theme.categoryColors.bills],
               ['Savings', built.plan.savings, theme.categoryColors.savings],
-              ['Spending money', resultSpending, theme.categoryColors.discretionary],
+              ['Flexible', resultSpending, theme.categoryColors.discretionary],
               ['Debt', built.plan.debt, theme.categoryColors.debt],
             ].map(([label, pence, color]) => (
               <View key={label as string} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: theme.space.md, borderBottomWidth: 1, borderBottomColor: theme.line }}>
@@ -451,8 +451,18 @@ export default function Onboarding() {
                 <Money pence={pence as number} mode="whole" variant="body" />
               </View>
             ))}
+            {/* The legend's Flexible figure is everything not committed to bills,
+                savings or debt. Only Lifestyle inside it is what spendRoom paces
+                daily, so the two numbers differ and the gap needs saying out
+                loud — at zero it is also the reason Home shows no daily number. */}
             <AppText variant="body" muted style={{ marginTop: theme.space.md }}>
-              Of that, <Money pence={built.plan.lifestyle} mode="whole" variant="body" />/mo is the day-to-day spending Coast paces for you.
+              {built.plan.lifestyle > 0 ? (
+                <>
+                  Of that, <Money pence={built.plan.lifestyle} mode="whole" variant="body" /> is Lifestyle — the part Coast paces day to day.
+                </>
+              ) : (
+                'You mapped nothing as Lifestyle, so there is no daily number to pace yet. Add some and your spend room starts working.'
+              )}
             </AppText>
           </View>
         )}
