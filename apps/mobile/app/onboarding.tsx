@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ScrollView, View, Pressable, TextInput, Text } from 'react-native';
 import { useRouter } from 'expo-router';
-import { parseAmount } from '@coast/core';
+import { parseAmount, formatGBP } from '@coast/core';
 import { useCoastStore } from '../src/store/store';
 import { Screen } from '../src/design/primitives/Screen';
 import { AppText } from '../src/design/primitives/Text';
@@ -215,7 +215,7 @@ export default function Onboarding() {
         {/* 4 — Bills */}
         {step === 4 && (
           <View style={{ marginTop: theme.space.lg }}>
-            <ContextBar label="LEFT AFTER HOME" pence={Math.max(0, incomeM - homeMonthly(flow))} note="HOME RESERVED" fraction={homeMonthly(flow) / Math.max(1, incomeM)} color={theme.accent} />
+            <ContextBar label="LEFT AFTER HOME" pence={Math.max(0, incomeM - homeMonthly(flow))} note={`${formatGBP(homeMonthly(flow), 'whole')} HOME RESERVED`} fraction={homeMonthly(flow) / Math.max(1, incomeM)} color={theme.accent} />
             <View style={{ marginTop: theme.space.xl }}>
               <Eyebrow text="PROTECT THE BILLS" color={theme.accent} />
               <AppText variant="title" style={{ marginTop: theme.space.sm }}>What else has to be paid each month?</AppText>
@@ -249,7 +249,7 @@ export default function Onboarding() {
         {/* 5 — Debt */}
         {step === 5 && (
           <View style={{ marginTop: theme.space.lg }}>
-            <ContextBar label="LEFT AFTER FIXED" pence={Math.max(0, incomeM - homeMonthly(flow) - billsMonthly(flow))} note="BILLS RESERVED" fraction={(homeMonthly(flow) + billsMonthly(flow)) / Math.max(1, incomeM)} color={theme.accent} />
+            <ContextBar label="LEFT AFTER FIXED" pence={Math.max(0, incomeM - homeMonthly(flow) - billsMonthly(flow))} note={`${formatGBP(homeMonthly(flow) + billsMonthly(flow), 'whole')} FIXED RESERVED`} fraction={(homeMonthly(flow) + billsMonthly(flow)) / Math.max(1, incomeM)} color={theme.accent} />
             <View style={{ marginTop: theme.space.xl }}>
               <Eyebrow text="PROTECT THE MINIMUMS" color={theme.categoryColors.debt} />
               <AppText variant="title" style={{ marginTop: theme.space.sm }}>What does debt need each month?</AppText>
