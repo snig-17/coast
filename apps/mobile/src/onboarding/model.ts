@@ -122,7 +122,11 @@ export interface Sub { name: string; pence: Pence }
 
 export interface Flow {
   incomes: IncomeSource[];
-  payFreq: Frequency;
+  /**
+   * The pay cycle comes from this rule alone. Each income carries its own
+   * cadence on IncomeSource.freq, which is only used to normalise that income
+   * to a monthly figure — it never sets the cycle.
+   */
   payday: PaydayRule;
   home: { kind: 'rent' | 'mortgage' | 'none'; amount: string };
   bills: { mode: 'quick' | 'breakdown'; amount: string; skipped: boolean };
@@ -141,7 +145,6 @@ const initCats = (defs: CatDef[]): Record<string, CategoryEntry> =>
 export function initialFlow(): Flow {
   return {
     incomes: [{ amount: '', freq: 'monthly' }],
-    payFreq: 'monthly',
     payday: { kind: 'day', dom: 25 },
     home: { kind: 'rent', amount: '' },
     bills: { mode: 'quick', amount: '', skipped: false },

@@ -179,6 +179,7 @@ export default function Onboarding() {
               <View key={i} style={{ marginTop: theme.space.lg }}>
                 {i > 0 ? <AppText variant="label" muted>EXTRA INCOME {i}</AppText> : null}
                 <AmountField value={inc.amount} prefix="£" underline onChangeText={(t) => setFlow((f) => ({ ...f, incomes: f.incomes.map((x, idx) => (idx === i ? { ...x, amount: t } : x)) }))} />
+                <AppText variant="label" muted style={{ marginTop: theme.space.md }}>HOW OFTEN DOES THIS ARRIVE?</AppText>
                 <ChipRow options={FREQUENCIES} value={inc.freq} onChange={(v) => setFlow((f) => ({ ...f, incomes: f.incomes.map((x, idx) => (idx === i ? { ...x, freq: v as Frequency } : x)) }))} />
               </View>
             ))}
@@ -196,9 +197,7 @@ export default function Onboarding() {
             <Eyebrow text="MONEY IN" color={theme.accent} />
             <AppText variant="title" style={{ marginTop: theme.space.sm }}>When does your money land?</AppText>
             <AppText variant="body" muted style={{ marginTop: theme.space.sm }}>Coast builds each plan payday to payday — not from the 1st.</AppText>
-            <AppText variant="label" muted style={{ marginTop: theme.space.xl }}>HOW ARE YOU PAID?</AppText>
-            <ChipRow options={FREQUENCIES} value={flow.payFreq} onChange={(v) => patch({ payFreq: v as Frequency })} />
-            <AppText variant="body" muted style={{ marginTop: theme.space.xl }}>Or use a rule that follows the calendar.</AppText>
+            <AppText variant="label" muted style={{ marginTop: theme.space.xl }}>A RULE THAT FOLLOWS THE CALENDAR</AppText>
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: theme.space.sm, marginTop: theme.space.md }}>
               <Chip label="First working day" selected={flow.payday.kind === 'firstWorkingDay'} onPress={() => patch({ payday: { kind: 'firstWorkingDay' } })} />
               <Chip label="Last working day" selected={flow.payday.kind === 'lastWorkingDay'} onPress={() => patch({ payday: { kind: 'lastWorkingDay' } })} />
