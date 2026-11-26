@@ -13,7 +13,7 @@ export function SegmentedToggle({
           <Pressable
             key={opt}
             onPress={() => onChange(opt)}
-            style={{ flex: 1, paddingVertical: theme.space.md, borderRadius: theme.radius.pill, backgroundColor: selected ? theme.text : 'transparent', alignItems: 'center' }}
+            style={{ flex: 1, paddingVertical: theme.space.md, borderRadius: theme.radius.pill, backgroundColor: selected ? theme.accent : 'transparent', alignItems: 'center' }}
           >
             <AppText variant="label" style={{ color: selected ? theme.onDark : theme.text }}>{opt}</AppText>
           </Pressable>

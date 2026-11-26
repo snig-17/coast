@@ -196,7 +196,7 @@ export function SegTwo({ a, b, value, onChange }: { a: string; b: string; value:
       {[a, b].map((opt) => {
         const on = value === opt;
         return (
-          <Pressable key={opt} onPress={() => onChange(opt)} style={{ flex: 1, paddingVertical: theme.space.md, alignItems: 'center', borderRadius: theme.radius.pill, backgroundColor: on ? theme.text : 'transparent' }}>
+          <Pressable key={opt} onPress={() => onChange(opt)} style={{ flex: 1, paddingVertical: theme.space.md, alignItems: 'center', borderRadius: theme.radius.pill, backgroundColor: on ? theme.accent : 'transparent' }}>
             <AppText variant="label" style={{ color: on ? theme.onDark : theme.text }}>{opt}</AppText>
           </Pressable>
         );
