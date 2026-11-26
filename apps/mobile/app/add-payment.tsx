@@ -7,6 +7,7 @@ import { Screen } from '../src/design/primitives/Screen';
 import { AppText } from '../src/design/primitives/Text';
 import { Money } from '../src/design/primitives/Money';
 import { PillButton } from '../src/design/primitives/PillButton';
+import { AmountField } from '../src/design/primitives/AmountField';
 import { theme } from '../src/design/theme';
 
 const PAYMENT_GROUPS = ['bills', 'savings', 'debt'];
@@ -55,14 +56,7 @@ export default function AddPayment() {
         <TextInput value={name} onChangeText={setName} placeholder="Rent, Netflix…" placeholderTextColor={theme.textMuted} style={fieldStyle} />
 
         <AppText variant="label" muted style={{ marginTop: theme.space.xl }}>AMOUNT</AppText>
-        <TextInput
-          value={amount}
-          onChangeText={setAmount}
-          keyboardType="decimal-pad"
-          placeholder="0.00"
-          placeholderTextColor={theme.textMuted}
-          style={{ fontFamily: theme.type.title.family, fontSize: theme.type.title.size, color: theme.text, paddingVertical: theme.space.sm }}
-        />
+        <AmountField value={amount} onChangeText={setAmount} />
         <AppText variant="body" muted>That's <Money pence={buildPayment(input, 'preview').amount} variant="body" /> per month</AppText>
 
         <AppText variant="label" muted style={{ marginTop: theme.space.xl }}>BILLING DAY (OF MONTH)</AppText>

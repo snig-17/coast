@@ -7,6 +7,7 @@ import { Screen } from '../src/design/primitives/Screen';
 import { AppText } from '../src/design/primitives/Text';
 import { Money } from '../src/design/primitives/Money';
 import { PillButton } from '../src/design/primitives/PillButton';
+import { AmountField } from '../src/design/primitives/AmountField';
 import { theme } from '../src/design/theme';
 
 let seq = 0;
@@ -48,14 +49,7 @@ export default function AddEntry() {
 
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 40 }}>
         <AppText variant="label" muted style={{ marginTop: theme.space.xl }}>AMOUNT</AppText>
-        <TextInput
-          value={amount}
-          onChangeText={setAmount}
-          keyboardType="decimal-pad"
-          placeholder="0.00"
-          placeholderTextColor={theme.textMuted}
-          style={{ fontFamily: theme.type.hero.family, fontSize: theme.type.hero.size, color: theme.text, paddingVertical: theme.space.sm }}
-        />
+        <AmountField value={amount} onChangeText={setAmount} scale="hero" />
         <AppText variant="body" muted>That's <Money pence={parsed.amount} variant="body" /></AppText>
 
         <AppText variant="label" muted style={{ marginTop: theme.space.xl }}>CATEGORY</AppText>

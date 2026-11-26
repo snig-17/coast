@@ -8,6 +8,7 @@ import { AppText } from '../src/design/primitives/Text';
 import { Money } from '../src/design/primitives/Money';
 import { PillButton } from '../src/design/primitives/PillButton';
 import { ProgressBar } from '../src/design/primitives/ProgressBar';
+import { AmountField } from '../src/design/primitives/AmountField';
 import { DonutChart } from '../src/design/DonutChart';
 import { WaveLine } from '../src/design/primitives/WaveLine';
 import { Shell } from '../src/design/primitives/Shell';
@@ -24,27 +25,11 @@ import { Eyebrow, ContextBar, ChipRow, Chip, DayCarousel, MoneySheet, SegTwo, Ma
 const LAST = 15; // Leaks / start
 const PHASE_LABEL = (s: number) => (s <= 5 ? 'YOUR MONEY' : s <= 10 ? 'YOUR PLAN' : 'YOUR PLAN');
 
-function AmountField({ value, onChangeText, placeholder = '0.00', prefix }: { value: string; onChangeText: (t: string) => void; placeholder?: string; prefix?: string }) {
-  return (
-    <View style={{ flexDirection: 'row', alignItems: 'flex-end', borderBottomWidth: 1, borderBottomColor: theme.line }}>
-      {prefix ? <AppText variant="title" muted style={{ paddingBottom: theme.space.sm }}>{prefix}</AppText> : null}
-      <TextInput
-        value={value}
-        onChangeText={onChangeText}
-        keyboardType="decimal-pad"
-        placeholder={placeholder}
-        placeholderTextColor={theme.textMuted}
-        style={{ flex: 1, fontFamily: theme.type.title.family, fontSize: theme.type.title.size, color: theme.text, paddingVertical: theme.space.sm }}
-      />
-    </View>
-  );
-}
-
 function LabeledAmount({ label, value, onChangeText }: { label: string; value: string; onChangeText: (t: string) => void }) {
   return (
     <View style={{ marginTop: theme.space.lg }}>
       <AppText variant="label" muted>{label}</AppText>
-      <AmountField value={value} onChangeText={onChangeText} />
+      <AmountField value={value} onChangeText={onChangeText} underline />
     </View>
   );
 }
@@ -175,7 +160,7 @@ export default function Onboarding() {
             {flow.incomes.map((inc, i) => (
               <View key={i} style={{ marginTop: theme.space.lg }}>
                 {i > 0 ? <AppText variant="label" muted>EXTRA INCOME {i}</AppText> : null}
-                <AmountField value={inc.amount} prefix="£" onChangeText={(t) => setFlow((f) => ({ ...f, incomes: f.incomes.map((x, idx) => (idx === i ? { ...x, amount: t } : x)) }))} />
+                <AmountField value={inc.amount} prefix="£" underline onChangeText={(t) => setFlow((f) => ({ ...f, incomes: f.incomes.map((x, idx) => (idx === i ? { ...x, amount: t } : x)) }))} />
                 <ChipRow options={FREQUENCIES} value={inc.freq} onChange={(v) => setFlow((f) => ({ ...f, incomes: f.incomes.map((x, idx) => (idx === i ? { ...x, freq: v as Frequency } : x)) }))} />
               </View>
             ))}
@@ -218,7 +203,7 @@ export default function Onboarding() {
               <View style={{ marginTop: theme.space.lg }}>
                 <SegTwo a="Rent" b="Mortgage" value={flow.home.kind === 'mortgage' ? 'Mortgage' : 'Rent'} onChange={(v) => patch({ home: { ...flow.home, kind: v === 'Mortgage' ? 'mortgage' : 'rent' } })} />
               </View>
-              {flow.home.kind !== 'none' && <View style={{ marginTop: theme.space.lg }}><AmountField value={flow.home.amount} prefix="£" onChangeText={(t) => patch({ home: { ...flow.home, amount: t } })} /></View>}
+              {flow.home.kind !== 'none' && <View style={{ marginTop: theme.space.lg }}><AmountField value={flow.home.amount} prefix="£" underline onChangeText={(t) => patch({ home: { ...flow.home, amount: t } })} /></View>}
               <Pressable onPress={() => patch({ home: { kind: flow.home.kind === 'none' ? 'rent' : 'none', amount: '' } })} style={{ flexDirection: 'row', alignItems: 'center', gap: theme.space.sm, marginTop: theme.space.lg }}>
                 <View style={{ width: 22, height: 22, borderRadius: 11, borderWidth: 2, borderColor: flow.home.kind === 'none' ? theme.accent : theme.line, backgroundColor: flow.home.kind === 'none' ? theme.accent : 'transparent' }} />
                 <AppText variant="body">I don't pay for housing</AppText>
@@ -239,7 +224,7 @@ export default function Onboarding() {
                 <SegTwo a="Quick total" b="Break it down" value={flow.bills.mode === 'breakdown' ? 'Break it down' : 'Quick total'} onChange={(v) => patch({ bills: { ...flow.bills, mode: v === 'Break it down' ? 'breakdown' : 'quick', skipped: false } })} />
               </View>
               {flow.bills.mode === 'quick' ? (
-                <View style={{ marginTop: theme.space.lg }}><AmountField value={flow.bills.amount} prefix="£" onChangeText={(t) => patch({ bills: { ...flow.bills, amount: t, skipped: false } })} /></View>
+                <View style={{ marginTop: theme.space.lg }}><AmountField value={flow.bills.amount} prefix="£" underline onChangeText={(t) => patch({ bills: { ...flow.bills, amount: t, skipped: false } })} /></View>
               ) : (
                 <View>
                   {['Council tax', 'Energy', 'Water', 'Internet', 'Phone', 'Insurance'].map((label) => (
@@ -270,7 +255,7 @@ export default function Onboarding() {
               <AppText variant="title" style={{ marginTop: theme.space.sm }}>What does debt need each month?</AppText>
               <OptionRow name="I have repayments" hint="Protect minimums and plan the rest" selected={flow.debt.has} onPress={() => patch({ debt: { ...flow.debt, has: true } })} />
               <OptionRow name="I don't have any debt" hint="Keep every spare pound working forward" selected={!flow.debt.has} onPress={() => patch({ debt: { has: false, amount: '' } })} />
-              {flow.debt.has && <View style={{ marginTop: theme.space.lg }}><AppText variant="label" muted>MINIMUM REPAYMENTS / MONTH</AppText><AmountField value={flow.debt.amount} prefix="£" onChangeText={(t) => patch({ debt: { ...flow.debt, amount: t } })} /></View>}
+              {flow.debt.has && <View style={{ marginTop: theme.space.lg }}><AppText variant="label" muted>MINIMUM REPAYMENTS / MONTH</AppText><AmountField value={flow.debt.amount} prefix="£" underline onChangeText={(t) => patch({ debt: { ...flow.debt, amount: t } })} /></View>}
             </View>
           </View>
         )}
@@ -350,13 +335,12 @@ export default function Onboarding() {
                 placeholderTextColor={theme.textMuted}
                 style={{ flex: 2, fontFamily: theme.type.body.family, fontSize: theme.type.title.size, color: theme.text, borderBottomWidth: 1, borderBottomColor: theme.line, paddingVertical: theme.space.sm }}
               />
-              <TextInput
+              <AmountField
                 value={subAmt}
                 onChangeText={setSubAmt}
-                keyboardType="decimal-pad"
                 placeholder="£/mo"
-                placeholderTextColor={theme.textMuted}
-                style={{ flex: 1, fontFamily: theme.type.title.family, fontSize: theme.type.title.size, color: theme.text, borderBottomWidth: 1, borderBottomColor: theme.line, paddingVertical: theme.space.sm }}
+                underline
+                containerStyle={{ flex: 1 }}
               />
             </View>
             <Pressable onPress={addCustomSub} style={{ marginTop: theme.space.md, opacity: subName.trim() && parseAmount(subAmt) > 0 ? 1 : 0.4 }}>

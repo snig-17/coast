@@ -36,3 +36,6 @@ coverage/
 
 # EAS
 eas.json.local
+
+# graphify knowledge-graph output (regenerate with /graphify)
+graphify-out/
