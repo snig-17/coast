@@ -98,6 +98,11 @@ export default function Onboarding() {
 
   const canProceed = (() => {
     if (step === 1) return incomeM > 0;
+    // Steps 3 and 4 each ask for a figure and offer an explicit opt-out. Until
+    // the user does one or the other the question is unanswered, so Continue
+    // stays dimmed the same way it does on step 1.
+    if (step === 3) return flow.home.kind === 'none' || homeMonthly(flow) > 0;
+    if (step === 4) return flow.bills.skipped || billsMonthly(flow) > 0;
     return true;
   })();
 
